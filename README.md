@@ -1,2 +1,4 @@
-# Calculator-Go
-Calculator written on Go
+# Calculator Go
+Калькулятор написанный на языке Go
+
+Написано как тестовая программа
