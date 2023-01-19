@@ -93,7 +93,7 @@ func calculate(a int, b int, sighn string) (int, error) {
 		}
 		return a / b, nil
 	}
-	return 0, nil
+	return 0, romeerr
 }
 
 func main() {
