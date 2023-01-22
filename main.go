@@ -31,7 +31,12 @@ func readformula() ([]string, error) {
 	text = strings.TrimSpace(text)
 	sep := strings.Split(text, " ")
 	sep = removespace(sep)
-	return sep, err
+	if len(sep) == 3 {
+		return sep, err
+	} else {
+		return sep, romeerr
+	}
+
 }
 
 func inarb(form []string) (a int, b int, err error) {
@@ -68,18 +73,33 @@ func inrome(a int) (string, error) {
 		9:  "IX",
 		10: "X",
 	}
+	ROME_DEC := map[int]string{
+		1:  "X",
+		2:  "XX",
+		3:  "XXX",
+		4:  "XL",
+		5:  "L",
+		6:  "LX",
+		7:  "LXX",
+		8:  "LXXX",
+		9:  "XC",
+		10: "C",
+	}
 	if a < 1 {
 		return "", zeroerr
 	}
 	var ret string
-	for a > 10 {
-		ret = ret + "X"
-		a = a - 10
+	if a >= 10 {
+		ret = ret + ROME_DEC[a/10]
+		a = a % 10
 	}
 	return ret + ROME_NUM[a], nil
 }
 
 func calculate(a int, b int, sighn string) (int, error) {
+	if (a > 10) || (a < 1) || (b > 10) || (b < 1) {
+		return 0, romeerr
+	}
 	switch sighn {
 	case "+":
 		return a + b, nil
@@ -97,9 +117,12 @@ func calculate(a int, b int, sighn string) (int, error) {
 }
 
 func main() {
-	sep, _ := readformula()
-	var rome bool
 	var err error
+	sep, err := readformula()
+	if err != nil {
+		panic(err.Error())
+	}
+	var rome bool
 	var a, b int
 	if sep[0][0] == 'I' || sep[0][0] == 'V' || sep[0][0] == 'X' {
 		rome = true
